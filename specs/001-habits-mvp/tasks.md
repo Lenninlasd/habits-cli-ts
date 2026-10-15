@@ -76,41 +76,41 @@ Tasks are ordered by dependency. Each task is sized to take no more than
 
 ## Command-line interface
 
-- [ ] **12. Implement command parsing and exit statuses** (20 min) —
+- [x] **12. Implement command parsing and exit statuses** (20 min) —
   RF-1, RF-2, RF-3
   - Accept `add <name>`, `done <name>`, and `list`; send normal output to
     stdout and errors to stderr.
   - **Done when:** each command routes to its operation and rejected commands
     return a nonzero status.
 
-- [ ] **13. Connect `add` to creation and messages** (20 min) — RF-1
+- [x] **13. Connect `add` to creation and messages** (20 min) — RF-1
   - Connect the command to exact-name validation and duplicate rejection,
     save new habits, and print the specified English messages.
   - **Done when:** a successful creation prints
     `Habit created: <habit-name>.` with status zero; an empty name or exact
     duplicate prints the corresponding error message with a nonzero status.
 
-- [ ] **14. Connect `done` to completions and messages** (20 min) — RF-2
+- [x] **14. Connect `done` to completions and messages** (20 min) — RF-2
   - Match the exact, case-sensitive habit name and connect the command to
     daily completion and the first, repeated, and nonexistent-habit messages.
   - **Done when:** each scenario prints exactly the specified message and
     returns the corresponding status, including when the submitted name's
     capitalization does not match an existing habit.
 
-- [ ] **15. Connect `list` to streaks and alphabetical ordering** (20 min) —
+- [x] **15. Connect `list` to streaks and alphabetical ordering** (20 min) —
   RF-3
   - Display each exact habit name and its streak in ascending case-sensitive
     order; handle an empty list.
   - **Done when:** output lists all habits in order with their streaks, and an
     empty list displays `No habits yet.` with status zero.
 
-- [ ] **16. Enable execution with Node.js** (15 min) — RF-1, RF-2,
+- [x] **16. Enable execution with Node.js** (15 min) — RF-1, RF-2,
   RF-3
   - Add the TypeScript entry point and compile it to `dist/habits.js`.
   - **Done when:** all three commands can be invoked from the project with
     `node dist/habits.js` and return their messages and exit statuses.
 
-- [ ] **17. Test commands end to end** (25 min) — RF-1, RF-2, RF-3
+- [x] **17. Test commands end to end** (25 min) — RF-1, RF-2, RF-3
   - Use Node.js's built-in test runner to cover argument parsing, user-visible
     messages, exact duplicate rejection, case-sensitive name identification,
     success and error flows, persistence across executions, and listing.

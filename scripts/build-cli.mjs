@@ -1,0 +1,8 @@
+import { mkdir, writeFile } from "node:fs/promises";
+
+await mkdir("dist", { recursive: true });
+await writeFile(
+  "dist/habits.js",
+  'import "./habits/index.js";\n',
+  "utf8",
+);
