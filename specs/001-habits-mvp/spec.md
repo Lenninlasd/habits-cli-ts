@@ -38,25 +38,21 @@ available across separate uses of the CLI.
 - When the submitted name is empty or contains only whitespace, the system
   shall reject it, display `Habit name is required.`, and return a nonzero
   status.
-- When a submitted name contains leading or trailing whitespace, the system
-  shall remove it; when it contains consecutive whitespace characters, the
-  system shall replace each sequence with a single space.
-- When normalizing a habit name, the system shall convert its letters to
-  lowercase and use the normalized name consistently for storage, display,
-  duplicate detection, and subsequent user identification.
-- When the submitted name matches an existing habit after normalization, the
-  system shall create a distinct name by appending a numeric suffix at the
-  end, beginning with `-2`.
-- When the proposed suffixed name also matches an existing habit, the system
-  shall increase the suffix until it finds an unused name. For example, if
-  `read` and `read-2` exist, creating `read` shall result in `read-3`.
+- The system shall preserve a valid submitted name exactly as entered,
+  including its capitalization and whitespace, for storage and display.
+- Habit-name identity shall be case-sensitive. Names that differ only by
+  capitalization, such as `read` and `Read`, shall be treated as distinct
+  habits.
+- When the submitted name exactly matches an existing habit, the system shall
+  reject it, display `Habit already exists: <submitted-name>.`, and return a
+  nonzero status. It shall not create another entry or append a suffix.
 - When a habit is created, the system shall display
-  `Habit created: <assigned-name>.` and return a zero status.
+  `Habit created: <habit-name>.` and return a zero status.
 
 ### RF-2 — Mark a habit complete today
 
-- When the user identifies an existing habit by its exact assigned name, the
-  system shall record that habit as completed for the current day.
+- When the user identifies an existing habit by its exact, case-sensitive
+  name, the system shall record that habit as completed for the current day.
 - When the same habit is marked complete more than once on the same day, the
   system shall retain only one completion for that habit and day.
 - When the user marks a habit complete for the first time that day, the system
@@ -75,7 +71,7 @@ available across separate uses of the CLI.
 - When the user requests the habit list, the system shall show each existing
   habit and its current consecutive-day streak.
 - When listing habits, the system shall order them alphabetically by their
-  normalized names in ascending order.
+  exact names in ascending case-sensitive order, without normalizing them.
 - When no habits exist, the system shall display `No habits yet.` and return a
   zero status.
 - When a habit has a completion today, the system shall calculate its streak
@@ -100,13 +96,14 @@ available across separate uses of the CLI.
 
 ## Edge cases
 
-- Creating a name that already exists, including a collision with an existing
-  suffixed name, results in the next available numeric suffix.
-- Habit names are normalized to lowercase, with leading/trailing whitespace
-  removed and consecutive whitespace replaced by a single space.
+- Creating a name that exactly matches an existing name is rejected with an
+  explicit duplicate-name message and a nonzero status.
+- Names that differ by capitalization are distinct and may both be created.
+- Valid habit names retain their original capitalization and whitespace.
 - Empty or whitespace-only habit names are rejected with an explicit required
   name message.
-- Habit names in the list are ordered alphabetically by normalized name.
+- Habit names in the list are ordered alphabetically by exact name, using
+  case-sensitive ordering.
 - Marking one habit complete repeatedly on a single day does not increase its
   completion count or streak.
 - Completing multiple distinct habits on one day is allowed.
@@ -130,11 +127,11 @@ available across separate uses of the CLI.
 ## Completion criteria
 
 - A user can create a habit and find it in a later listing.
-- Repeated normalized names are made distinct using the next available numeric
-  suffix.
+- A habit name is stored and displayed exactly as entered.
+- Names that differ only by capitalization can be created as separate habits.
+- Creating an exact duplicate name is rejected with a duplicate-name message
+  and a nonzero status; no numeric suffix is added.
 - Empty or whitespace-only names are rejected with a required-name message.
-- Name normalization is applied consistently to stored, displayed, and
-  identified habit names.
 - A user can mark an existing habit complete for the current day.
 - Repeated completion of one habit on the same day does not create additional
   daily records.
@@ -142,7 +139,7 @@ available across separate uses of the CLI.
 - An attempt to complete a nonexistent habit reports that it does not exist.
 - The list shows the current streak for every habit, including the specified
   today, yesterday, missed-day, and zero-streak cases.
-- Habits are listed alphabetically by normalized name.
+- Habits are listed alphabetically by exact name in case-sensitive order.
 - The commands provide the specified feedback and status for success and
   failure.
 

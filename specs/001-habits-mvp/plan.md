@@ -4,7 +4,7 @@
 
 - `habits/storage.ts` — Load and save local JSON data without discarding
   existing records. Supports persistence required by RF-1 and RF-2.
-- `habits/core.ts` — Habit creation, name normalization, daily completion, and
+- `habits/core.ts` — Habit creation, exact name identity, daily completion, and
   streak calculation, independent of CLI input/output. Covers RF-1, RF-2, and
   RF-3.
 - `habits/cli.ts` — Parse commands, present the specified English messages,
@@ -29,24 +29,25 @@
 }
 ```
 
-- Store each habit using its normalized, assigned name. (RF-1)
+- Store each habit using its exact submitted name, preserving capitalization
+  and whitespace. (RF-1)
 - Store completion dates in ISO format (`YYYY-MM-DD`), in ascending order,
   without duplicates for the same habit and day. (RF-2)
 - Persist records locally in a human-readable format. Preserve existing data;
   if loading fails, report the error and do not overwrite the data.
 - Use Node.js built-in file and JSON APIs for local persistence.
 
-## Name normalization and creation (RF-1)
+## Name identity and creation (RF-1)
 
 - Reject empty or whitespace-only names with `Habit name is required.` and a
   nonzero status.
-- Trim leading and trailing whitespace, replace each run of whitespace with a
-  single space, and convert letters to lowercase.
-- Use the normalized name consistently for storage, display, duplicate
-  detection, and habit identification.
-- If the normalized name is already assigned, append `-2`; if that name is
-  also taken, increment the suffix until an unused assigned name is found.
-- On success, display `Habit created: <assigned-name>.` and return status 0.
+- Preserve each valid name exactly as submitted, including capitalization and
+  whitespace.
+- Compare names exactly and case-sensitively. Names such as `read` and `Read`
+  are distinct; reject an exact duplicate with
+  `Habit already exists: <submitted-name>.` and a nonzero status.
+- Never append a suffix to a habit name.
+- On success, display `Habit created: <habit-name>.` and return status 0.
 
 ## Completion and streak behavior (RF-2, RF-3)
 
@@ -54,7 +55,8 @@
   have no more than one completion per day.
 - If the habit is already complete today, leave its records unchanged, display
   `Already completed today: <habit-name>.`, and return status 0.
-- If the habit does not exist, display
+- Match a habit by its exact, case-sensitive name. If the habit does not
+  exist, display
   `Habit does not exist: <submitted-name>.`, return a nonzero status, and do
   not change the data.
 - Calculate a current streak from the most recent completion when it is today
@@ -71,23 +73,23 @@
 - Return status 0 for successful operations and a nonzero status for rejected
   operations.
 - When the list is empty, display `No habits yet.` and return status 0.
-- List habits in ascending alphabetical order by normalized name, showing each
-  name and its current streak.
+- List habits in ascending alphabetical, case-sensitive order by exact name,
+  showing each name and its current streak.
 - Keep all user-facing messages in English, as required by the constitution
   and the specification.
 
 ## Test strategy
 
 - Use Node.js's built-in test runner, with tests organized under `tests/`.
-- **RF-1:** Test required-name validation; trimming, whitespace collapsing, and
-  lowercase normalization; duplicate suffix assignment and suffix collisions;
-  persistence; success message and status.
+- **RF-1:** Test required-name validation; exact name preservation; distinct
+  case variants; exact-duplicate rejection without suffixes; persistence;
+  success and error messages and statuses.
 - **RF-2:** Test recording a completion; repeated same-day completion without
   duplicate records; completions for different habits on the same day;
   nonexistent-habit message and status; persistence.
 - **RF-3:** Test streaks with no completions, today, yesterday, missed days,
-  one-day streaks, and longer consecutive runs; alphabetical listing; empty
-  list message and status.
+  one-day streaks, and longer consecutive runs; case-sensitive alphabetical
+  listing by exact name; empty list message and status.
 - Test storage with temporary directories for missing, valid, and corrupt
   data. Verify corrupt data is reported and never overwritten.
 - Test the CLI command parsing and user-visible messages/statuses.
@@ -100,9 +102,9 @@
 - The earlier plan specified Spanish CLI messages, conflicting with the
   constitution's English-only rule and the specification's English message
   text. The CLI contract now uses English.
-- The earlier plan preserved original name spelling and only used trimming
-  plus case-folding. The specification requires normalized lowercase names,
-  trimmed ends, collapsed internal whitespace, and consistent use for display
-  and identification. This plan follows that requirement.
+- The earlier plan normalized names and assigned numeric suffixes. The
+  specification now requires exact, case-sensitive name identity and rejects
+  exact duplicates without suffixes; this plan follows the revised
+  requirement.
 - The earlier plan's completion-data uniqueness was labeled RF-5, which does
   not exist. It is now correctly associated with RF-2.

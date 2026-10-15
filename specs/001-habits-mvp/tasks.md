@@ -25,31 +25,29 @@ Tasks are ordered by dependency. Each task is sized to take no more than
 
 ## Habit and completion rules
 
-- [x] **4. Implement name normalization and validation** (20 min) — RF-1
-  - Reject empty or whitespace-only names; trim leading and trailing
-    whitespace, collapse whitespace sequences, and convert letters to
-    lowercase.
-  - **Done when:** tests cover rejection and each specified transformation,
-    with the expected normalized name.
+- [ ] **4. Implement exact name validation** (20 min) — RF-1
+  - Reject empty or whitespace-only names and preserve every valid name
+    exactly as submitted, including capitalization and whitespace.
+  - **Done when:** tests verify required-name rejection and exact name
+    preservation.
 
-- [x] **5. Test name normalization** (15 min) — RF-1
-  - Add unit tests for leading/trailing whitespace, consecutive whitespace,
-    lowercase conversion, and empty input.
-  - **Done when:** all variants produce the specified result or the required
-    rejection.
+- [ ] **5. Test exact name identity** (15 min) — RF-1
+  - Add unit tests proving that capitalization variants are distinct and that
+    valid names are not normalized.
+  - **Done when:** tests verify exact name preservation and case-sensitive
+    identity.
 
-- [x] **6. Implement habit creation and unique name assignment** (25 min) —
-  RF-1
-  - Create habits with normalized names and choose the first available numeric
-    suffix, starting with `-2`.
-  - **Done when:** repeated normalized names generate `-2`, and collisions
-    with existing suffixed names advance to the next available name.
+- [ ] **6. Implement exact duplicate rejection** (25 min) — RF-1
+  - Reject an exact, case-sensitive duplicate with the specified error
+    message; never append a suffix.
+  - **Done when:** exact duplicates fail without changing data, while names
+    that differ only by capitalization can both be created.
 
-- [x] **7. Test habit creation and persistence** (20 min) — RF-1
-  - Cover assigned names, suffix collisions, and habit availability after
-    loading from storage.
-  - **Done when:** tests verify assigned names and that a created habit is
-    unchanged after saving and reloading.
+- [ ] **7. Test habit creation and persistence** (20 min) — RF-1
+  - Cover exact-name creation, duplicate rejection, case variants, and habit
+    availability after loading from storage.
+  - **Done when:** tests verify names are preserved exactly after saving and
+    reloading.
 
 - [x] **8. Implement idempotent daily completion** (20 min) — RF-2
   - Record the current date for an existing habit without adding duplicates;
@@ -85,23 +83,24 @@ Tasks are ordered by dependency. Each task is sized to take no more than
   - **Done when:** each command routes to its operation and rejected commands
     return a nonzero status.
 
-- [x] **13. Connect `add` to creation and messages** (20 min) — RF-1
-  - Connect the command to the name rules, save the habit, and print the
-    specified English messages.
+- [ ] **13. Connect `add` to creation and messages** (20 min) — RF-1
+  - Connect the command to exact-name validation and duplicate rejection,
+    save new habits, and print the specified English messages.
   - **Done when:** a successful creation prints
-    `Habit created: <assigned-name>.` with status zero, and an empty name prints
-    the required message with a nonzero status.
+    `Habit created: <habit-name>.` with status zero; an empty name or exact
+    duplicate prints the corresponding error message with a nonzero status.
 
-- [x] **14. Connect `done` to completions and messages** (20 min) — RF-2
-  - Connect the command to daily completion and print the messages for first
-    completion, repeated completion, and a nonexistent habit.
+- [ ] **14. Connect `done` to completions and messages** (20 min) — RF-2
+  - Match the exact, case-sensitive habit name and connect the command to
+    daily completion and the first, repeated, and nonexistent-habit messages.
   - **Done when:** each scenario prints exactly the specified message and
-    returns the corresponding status.
+    returns the corresponding status, including when the submitted name's
+    capitalization does not match an existing habit.
 
-- [x] **15. Connect `list` to streaks and alphabetical ordering** (20 min) —
+- [ ] **15. Connect `list` to streaks and alphabetical ordering** (20 min) —
   RF-3
-  - Display each normalized habit and its streak in ascending order; handle an
-    empty list.
+  - Display each exact habit name and its streak in ascending case-sensitive
+    order; handle an empty list.
   - **Done when:** output lists all habits in order with their streaks, and an
     empty list displays `No habits yet.` with status zero.
 
@@ -111,10 +110,10 @@ Tasks are ordered by dependency. Each task is sized to take no more than
   - **Done when:** all three commands can be invoked from the project with
     `node dist/habits.js` and return their messages and exit statuses.
 
-- [x] **17. Test commands end to end** (25 min) — RF-1, RF-2, RF-3
+- [ ] **17. Test commands end to end** (25 min) — RF-1, RF-2, RF-3
   - Use Node.js's built-in test runner to cover argument parsing, user-visible
-    messages, success and error flows, persistence across executions, and
-    listing.
+    messages, exact duplicate rejection, case-sensitive name identification,
+    success and error flows, persistence across executions, and listing.
   - **Done when:** automated tests verify the output and exit-status
     contracts for all three commands, and a habit created in one execution
     remains available in the next.
