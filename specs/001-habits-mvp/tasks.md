@@ -25,50 +25,50 @@ Tasks are ordered by dependency. Each task is sized to take no more than
 
 ## Habit and completion rules
 
-- [ ] **4. Implement exact name validation** (20 min) — RF-1
+- [x] **4. Implement exact name validation** (20 min) — RF-1
   - Reject empty or whitespace-only names and preserve every valid name
     exactly as submitted, including capitalization and whitespace.
   - **Done when:** tests verify required-name rejection and exact name
     preservation.
 
-- [ ] **5. Test exact name identity** (15 min) — RF-1
+- [x] **5. Test exact name identity** (15 min) — RF-1
   - Add unit tests proving that capitalization variants are distinct and that
     valid names are not normalized.
   - **Done when:** tests verify exact name preservation and case-sensitive
     identity.
 
-- [ ] **6. Implement exact duplicate rejection** (25 min) — RF-1
+- [x] **6. Implement exact duplicate rejection** (25 min) — RF-1
   - Reject an exact, case-sensitive duplicate with the specified error
     message; never append a suffix.
   - **Done when:** exact duplicates fail without changing data, while names
     that differ only by capitalization can both be created.
 
-- [ ] **7. Test habit creation and persistence** (20 min) — RF-1
+- [x] **7. Test habit creation and persistence** (20 min) — RF-1
   - Cover exact-name creation, duplicate rejection, case variants, and habit
     availability after loading from storage.
   - **Done when:** tests verify names are preserved exactly after saving and
     reloading.
 
-- [ ] **8. Implement idempotent daily completion** (20 min) — RF-2
+- [x] **8. Implement idempotent daily completion** (20 min) — RF-2
   - Record the current date for an existing habit without adding duplicates;
     do not change data if the habit does not exist.
   - **Done when:** a second completion on the same date leaves the date list
     unchanged, and an unknown name does not change any data.
 
-- [ ] **9. Test daily completion rules** (20 min) — RF-2
+- [x] **9. Test daily completion rules** (20 min) — RF-2
   - Cover first and repeated completions, two habits on the same day, and
     completion of a nonexistent habit.
   - **Done when:** tests verify one date per habit and day, independent records
     per habit, and no changes for an unknown habit.
 
-- [ ] **10. Implement deterministic streak calculation** (25 min) — RF-3
+- [x] **10. Implement deterministic streak calculation** (25 min) — RF-3
   - Calculate the streak from today or yesterday, count consecutive days
     backward, and return zero if there is no qualifying date; accept the
     current date as an input.
   - **Done when:** the same history and reference date always produce the same
     streak, including gaps and no recent completions.
 
-- [ ] **11. Test streak cases** (20 min) — RF-3
+- [x] **11. Test streak cases** (20 min) — RF-3
   - Cover no completions, today, yesterday, a missed day, a single date, and a
     multi-day consecutive run.
   - **Done when:** every case returns the exact expected count, including zero
