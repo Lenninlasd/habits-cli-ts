@@ -18,7 +18,8 @@ Tasks are ordered by dependency. Each task is sized to take no more than
     completions exactly.
 
 - [x] **3. Test persistence errors** (20 min) — RF-1, RF-2
-  - Use pytest and temporary paths to cover corrupt files and load errors.
+  - Use Node.js's built-in test runner and temporary paths to cover corrupt
+    files and load errors.
   - **Done when:** errors are reported and a failed load does not overwrite or
     discard existing data.
 
@@ -104,15 +105,16 @@ Tasks are ordered by dependency. Each task is sized to take no more than
   - **Done when:** output lists all habits in order with their streaks, and an
     empty list displays `No habits yet.` with status zero.
 
-- [x] **16. Enable execution with `python -m habits`** (15 min) — RF-1, RF-2,
+- [x] **16. Enable execution with Node.js** (15 min) — RF-1, RF-2,
   RF-3
-  - Add the entry point that delegates to the CLI.
+  - Add the TypeScript entry point and compile it to `dist/habits.js`.
   - **Done when:** all three commands can be invoked from the project with
-    `python -m habits` and return their messages and exit statuses.
+    `node dist/habits.js` and return their messages and exit statuses.
 
 - [x] **17. Test commands end to end** (25 min) — RF-1, RF-2, RF-3
-  - Test argument parsing, user-visible messages, success and error flows,
-    persistence across executions, and listing.
-  - **Done when:** pytest verifies the output and exit-status contracts for all
-    three commands, and a habit created in one execution remains available in
-    the next.
+  - Use Node.js's built-in test runner to cover argument parsing, user-visible
+    messages, success and error flows, persistence across executions, and
+    listing.
+  - **Done when:** automated tests verify the output and exit-status
+    contracts for all three commands, and a habit created in one execution
+    remains available in the next.

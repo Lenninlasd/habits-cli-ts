@@ -1,5 +1,10 @@
 # Habits CLI MVP
 
+## Technical baseline
+
+- Use Node.js 24.22.0 LTS and TypeScript 7.0.2.
+- Use Node.js built-in modules at runtime and its built-in test runner.
+
 ## Context and objective
 
 People who are building study habits need a simple way to record what they

@@ -2,16 +2,17 @@
 
 ## Module structure
 
-- `habits/storage.py` — Load and save local JSON data without discarding
+- `habits/storage.ts` — Load and save local JSON data without discarding
   existing records. Supports persistence required by RF-1 and RF-2.
-- `habits/core.py` — Habit creation, name normalization, daily completion, and
+- `habits/core.ts` — Habit creation, name normalization, daily completion, and
   streak calculation, independent of CLI input/output. Covers RF-1, RF-2, and
   RF-3.
-- `habits/cli.py` — Parse commands, present the specified English messages,
+- `habits/cli.ts` — Parse commands, present the specified English messages,
   and return command status codes. Covers the user-facing behavior in RF-1,
   RF-2, and RF-3.
-- `habits/__main__.py` — Enable running the CLI as `python -m habits`.
-- `tests/` — Automated pytest coverage for every requirement in RF-1 through
+- `habits/index.ts` — CLI entry point, compiled to `dist/habits.js`.
+- `tests/` — Automated tests with Node.js's built-in test runner for every
+  requirement in RF-1 through
   RF-3, including the specified edge cases.
 
 ## Data model (`habits.json`)
@@ -21,7 +22,7 @@
   "version": 1,
   "habits": [
     {
-      "name": "study python",
+      "name": "study typescript",
       "completions": ["2026-08-25", "2026-08-26", "2026-08-27"]
     }
   ]
@@ -33,6 +34,7 @@
   without duplicates for the same habit and day. (RF-2)
 - Persist records locally in a human-readable format. Preserve existing data;
   if loading fails, report the error and do not overwrite the data.
+- Use Node.js built-in file and JSON APIs for local persistence.
 
 ## Name normalization and creation (RF-1)
 
@@ -64,6 +66,7 @@
 ## CLI contract (RF-1, RF-2, RF-3)
 
 - Commands: `habits add <name>`, `habits done <name>`, and `habits list`.
+- Run the compiled CLI from the project root as `node dist/habits.js`.
 - Send command results to stdout and errors to stderr.
 - Return status 0 for successful operations and a nonzero status for rejected
   operations.
@@ -75,6 +78,7 @@
 
 ## Test strategy
 
+- Use Node.js's built-in test runner, with tests organized under `tests/`.
 - **RF-1:** Test required-name validation; trimming, whitespace collapsing, and
   lowercase normalization; duplicate suffix assignment and suffix collisions;
   persistence; success message and status.
@@ -84,7 +88,7 @@
 - **RF-3:** Test streaks with no completions, today, yesterday, missed days,
   one-day streaks, and longer consecutive runs; alphabetical listing; empty
   list message and status.
-- Test storage with pytest temporary paths for missing, valid, and corrupt
+- Test storage with temporary directories for missing, valid, and corrupt
   data. Verify corrupt data is reported and never overwritten.
 - Test the CLI command parsing and user-visible messages/statuses.
 
