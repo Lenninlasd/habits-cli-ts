@@ -49,26 +49,26 @@ Tasks are ordered by dependency. Each task is sized to take no more than
   - **Done when:** tests verify names are preserved exactly after saving and
     reloading.
 
-- [x] **8. Implement idempotent daily completion** (20 min) — RF-2
+- [ ] **8. Implement idempotent daily completion** (20 min) — RF-2
   - Record the current date for an existing habit without adding duplicates;
     do not change data if the habit does not exist.
   - **Done when:** a second completion on the same date leaves the date list
     unchanged, and an unknown name does not change any data.
 
-- [x] **9. Test daily completion rules** (20 min) — RF-2
+- [ ] **9. Test daily completion rules** (20 min) — RF-2
   - Cover first and repeated completions, two habits on the same day, and
     completion of a nonexistent habit.
   - **Done when:** tests verify one date per habit and day, independent records
     per habit, and no changes for an unknown habit.
 
-- [x] **10. Implement deterministic streak calculation** (25 min) — RF-3
+- [ ] **10. Implement deterministic streak calculation** (25 min) — RF-3
   - Calculate the streak from today or yesterday, count consecutive days
     backward, and return zero if there is no qualifying date; accept the
     current date as an input.
   - **Done when:** the same history and reference date always produce the same
     streak, including gaps and no recent completions.
 
-- [x] **11. Test streak cases** (20 min) — RF-3
+- [ ] **11. Test streak cases** (20 min) — RF-3
   - Cover no completions, today, yesterday, a missed day, a single date, and a
     multi-day consecutive run.
   - **Done when:** every case returns the exact expected count, including zero
@@ -76,7 +76,7 @@ Tasks are ordered by dependency. Each task is sized to take no more than
 
 ## Command-line interface
 
-- [x] **12. Implement command parsing and exit statuses** (20 min) —
+- [ ] **12. Implement command parsing and exit statuses** (20 min) —
   RF-1, RF-2, RF-3
   - Accept `add <name>`, `done <name>`, and `list`; send normal output to
     stdout and errors to stderr.
@@ -104,7 +104,7 @@ Tasks are ordered by dependency. Each task is sized to take no more than
   - **Done when:** output lists all habits in order with their streaks, and an
     empty list displays `No habits yet.` with status zero.
 
-- [x] **16. Enable execution with Node.js** (15 min) — RF-1, RF-2,
+- [ ] **16. Enable execution with Node.js** (15 min) — RF-1, RF-2,
   RF-3
   - Add the TypeScript entry point and compile it to `dist/habits.js`.
   - **Done when:** all three commands can be invoked from the project with
